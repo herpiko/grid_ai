@@ -1,6 +1,6 @@
 <div>
         <h4 id="title" >Grid AI</h4>
-        
+        <h4 id="guide">Klik koordinat untuk membuat tembok <button id="tembokselesai">Selesai</button></h4>    
     <div id="container">
     </div>
     <p>
@@ -16,9 +16,6 @@
                         <input type="text" id="robot"><button id="pasang_robot" onclick="pasang_robot($('#robot').val())">Pasang robot</button>
                         <br>
                         <input type="text" id="target"><button id="pasang_target" onclick="pasang_target($('#target').val())">Pasang target</button>
-<br>
-
-                        <input type="text" id="tambah"><button id="tambahtembok_" onclick="tambah_tembok($('#tambah').val())">Tambah tembok</button>
                 
             <h4>Jalankan</h4>
             <button onclick="bfs_loop()">BFS mode</button>
@@ -36,10 +33,11 @@ var target;
 var tembok=[];
 var sudah=[];
 var looping;
+var pohon=[];
 //step
 
     var antrian=[];
-    var pernah=[43];
+    var pernah=[];
     var antrian_id=1;
     var loc;
     var y;
@@ -49,17 +47,34 @@ var looping;
     var ceksudah;
     var ceksudahflag=false;
     var sudahpernah=false;
-function waste(){
+function path(){
+var path=[];
+var zz;
+var yy;
+var bb;
+var xx=target;;
+var aa = pohon.length-1;
+    for(bb=(aa);bb>0;bb--){
+        if(pohon[bb].anak==xx){
+            xx=pohon[bb].ortu;
+            path.push(xx);
+        
+        }
+    }
+    for(yy=0;yy<path.length;yy++){
+        $('#'+path[yy]).removeClass('yellow');
+        $('#'+path[yy]).addClass('white');
+    }
+    console.log('pohon : '+JSON.stringify(pohon));
+    console.log('path : '+path);
+    $('#guide').html('Done! '+(langkah+1)+' langkah pencarian dalam BFS, '+(path.length+1)+' langkah solusi tercepat.');
 }
-
 function bfs_step(){
-    if(parseInt(loc)==parseInt(target)){
-        alert('Udah ketemu!');
-        clearInterval(loopin);
+    breakpoint : if(parseInt(loc)==parseInt(target)){
     } else {
     
     
-    $('#title').html('Processing...');
+    $('#guide').html('Processing...');
     $('#muatulang').show();
     antrian_id=parseInt(antrian_id)+1;
     //perulangan
@@ -89,6 +104,16 @@ function bfs_step(){
                 console.log(JSON.stringify(antrian));
                 antrian_id=parseInt(antrian_id)+1;
                 pernah.push(parseInt(y));
+                //bikin pohon
+                pohon.push({ortu:loc,anak:y});
+                //if target
+                if(y==target){
+                    clearInterval(looping);
+                    $('#'+y).removeClass('green');
+                    path();
+                    alert('Target udah ketemu!');
+                    break breakpoint;
+                }
             } else {
                 console.log('sudah pernah, skip')
             }
@@ -112,6 +137,16 @@ function bfs_step(){
                 console.log(JSON.stringify(antrian));
                 antrian_id=parseInt(antrian_id)+1;
                 pernah.push(parseInt(y));
+                //bikin pohon
+                pohon.push({ortu:loc,anak:y});
+                //if target
+                if(y==target){
+                    clearInterval(looping);
+                    $('#'+y).removeClass('green');
+                    path();
+                    alert('Target udah ketemu!');
+                    break breakpoint;
+                }
             } else {
                 console.log('sudah pernah, skip')
             }
@@ -135,6 +170,16 @@ function bfs_step(){
                 console.log(JSON.stringify(antrian));
                 antrian_id=parseInt(antrian_id)+1;
                 pernah.push(parseInt(y));
+                //bikin pohon
+                pohon.push({ortu:loc,anak:y});
+                //if target
+                if(y==target){
+                    clearInterval(looping);
+                    $('#'+y).removeClass('green');
+                    path();
+                    alert('Target udah ketemu!');
+                    break breakpoint;
+                }
             } else {
                 console.log('sudah pernah, skip')
             }
@@ -158,6 +203,16 @@ function bfs_step(){
                 console.log(JSON.stringify(antrian));
                 antrian_id=parseInt(antrian_id)+1;
                 pernah.push(parseInt(y));
+                //bikin pohon
+                pohon.push({ortu:loc,anak:y});
+                //if target
+                if(y==target){
+                    clearInterval(looping);
+                    $('#'+y).removeClass('green');
+                    path();
+                    alert('Target udah ketemu!');
+                    break breakpoint;
+                }
             } else {
                 console.log('sudah pernah, skip')
             }
@@ -233,126 +288,10 @@ function bfs_step(){
 }
 
 function bfs_loop(){
+    $('#kontrol').hide();
     looping = setInterval(function(){
         bfs_step();
-    },300);
-}
-function bfs(){
-    $('#title').html('Processing...');
-    $('#kontrol').hide();
-    $('#muatulang').show();
-    var antrian;
-    var antrian_id;
-    var loc;
-    var y;
-    var x;
-    antrian = [];
-    antrian_id=1;
-    antrian_id=parseInt(antrian_id)+1;
-    loc = robot;
-    
-    //perulangan
-    
-    var langkah=1; 
-    
-    //for(q=0;q<30;q++){
-    
-    var q = 0;
-    while(loc!=target){
-    
-    $('#'+loc).addClass('yellow');
-    if(!istembok(loc)){
-
-    
-        console.log('==========================================');
-        console.log('perulangan untuk sekililing '+loc);
-        
-        tembok.push(loc);
-        waste();
-        // atas
-        loc = parseInt(loc);
-        y = loc-20;
-        if(!istembok(y)){
-            console.log('atas '+y+' '+!istembok(y))
-            antrian.push({id:antrian_id,loc:y});
-            console.log({id:antrian_id,loc:y});
-            antrian_id=parseInt(antrian_id)+1;
-        }
-        // kiri
-        loc = parseInt(loc);
-        y = loc-1;
-        if(!istembok(y)){
-            console.log('kiri '+y+' '+!istembok(y))
-            antrian.push({id:antrian_id,loc:y});
-            console.log({id:antrian_id,loc:y});
-            antrian_id=parseInt(antrian_id)+1;
-        }
-        waste();
-        // bawah
-        loc = parseInt(loc);
-        y = loc+20;
-        if(!istembok(y)){
-            console.log('bawah '+y+' '+!istembok(y))
-            antrian.push({id:antrian_id,loc:y});
-            console.log({id:antrian_id,loc:y});
-            antrian_id=parseInt(antrian_id)+1;
-        }
-        waste();
-        // kanan
-        loc = parseInt(loc);
-        y = loc+1;
-        if(!istembok(y)){
-            console.log('kanan '+y+' '+!istembok(y))
-            antrian.push({id:antrian_id,loc:y});
-            console.log({id:antrian_id,loc:y});
-            antrian_id=parseInt(antrian_id)+1;
-        } 
-        
-    }
-        console.log('langkah ke '+langkah );
-        console.log(tembok);
-        var ceksudah;
-        if(ceksudahflag){
-            q=q+1;
-            ceksudahflag=false;
-        }
-        var loc = parseInt(antrian[q].loc)
-        console.log('cek nilai '+loc);
-        var tem;
-        for(tem=0;tem<tembok.length;tem++){
-            console.log('cek tembok '+tembok[tem]);
-                if(parseInt(tembok[tem])==parseInt(loc)){
-                
-                ceksudah = true;
-            }
-        }
-        if(ceksudah){
-            var loc = parseInt(antrian[q].loc)
-            console.log('nilai '+loc+' sudah ada di tembok');
-            console.log(JSON.stringify(antrian));
-            console.log(antrian_id);
-            loc = '';
-            var r = q+1;
-            var loc = parseInt(antrian[r].loc)
-            console.log('nilai yang diambil '+loc);
-            var ceksudahflag=true;
-            $('#'+loc).html('<strong>'+langkah+'</strong>');
-            console.log('langkah : '+langkah+' untuk lokasi '+loc);
-            langkah++
-        } else {
-            var loc = parseInt(antrian[q].loc)
-            console.log('nilai '+loc+' belum ada di tembok');
-            console.log(JSON.stringify(antrian));
-            console.log('nilai yang diambil '+loc);
-            console.log(antrian_id);
-            $('#'+loc).html('<strong>'+langkah+'</strong>');
-            console.log('langkah : '+langkah+' untuk lokasi '+loc);
-            langkah++
-        
-        }
-
-    }
-    $('#title').html('Selesai!');
+    },50);
 }
 
 
@@ -364,7 +303,7 @@ function bangun_grid(){
     while(x<=y){
             $('#container').append('<div style="">');
         while(id<=z){
-            $('#container').append('<div class=\"grid\" id=\"'+id+'\">'+id+'</div>');
+            $('#container').append('<div class=\"grid tembokable\" id=\"'+id+'\">'+id+'</div>');
             id=id+1;
         }
         z=z+y
@@ -410,7 +349,6 @@ function bangun_tembok(){
         id=id+20;
     }
     $('#bangun_tembok_').hide();
-    $('#kontrol').show();
 }
 
 function istembok(id){
@@ -423,6 +361,8 @@ function istembok(id){
 }
 function pasang_robot(id){
     loc = id;
+    pernah=[];
+    pernah=[id];
     console.log('robot');
     if(id>=0 && id<=400){    
         if(!istembok(id)){
@@ -475,8 +415,18 @@ function derajat270(){
 $(document).ready(function () {
     bangun_grid();
     bangun_tembok();
-    pasang_robot(43);
+    var tembokable=true;
+    $('.tembokable').click(function(){
+            if(tembokable){
+            tambah_tembok(parseInt(($(this).text())));
+            }
+            });
 
+    $('#tembokselesai').click(function(){
+            tembokable=false;
+            $('#guide').html('Pasang robot dan target');
+            $('#kontrol').show();
+            });    
 });
 </script>
 <style>
@@ -492,8 +442,12 @@ $(document).ready(function () {
     height:20px;
     font-size:10px;
     color:#969696;
+    cursor:pointer;
 }
 
+.white{
+    background-color:white;
+}
 .yellow{
     background-color:yellow;
 }
