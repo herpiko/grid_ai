@@ -1,16 +1,6 @@
 <div>
         <h4 id="title" >Grid AI</h4>
         <h4 id="guide">Klik koordinat untuk membuat tembok <button id="tembokselesai">Selesai</button></h4>    
-    <div id="container">
-    </div>
-    <p>
-    
-    <div style="display:none" id="muatulang">
-          <a href="">Muat ulang laman</a>
-
-    </div>
-                    <button id="bangun_grid_" onclick="bangun_grid()">Bangun grid</button>
-                    <button id="bangun_tembok_" style="display:none" onclick="bangun_tembok()">Bangun tembok</button>
             <div style="display:none" id="kontrol">
                     <h4>Masukkan variabel koordinat lokasi</h4>
                         <input type="text" id="robot"><button id="pasang_robot" onclick="pasang_robot($('#robot').val())">Pasang robot</button>
@@ -23,6 +13,16 @@
             <button onclick="" disabled>DFS mode</button>
             <button onclick="" disabled>A* mode</button>
 </div>
+    <div id="container">
+    </div>
+    <p>
+    
+    <div style="display:none" id="muatulang">
+          <a href="">Muat ulang laman</a>
+
+    </div>
+                    <button id="bangun_grid_" onclick="bangun_grid()">Bangun grid</button>
+                    <button id="bangun_tembok_" style="display:none" onclick="bangun_tembok()">Bangun tembok</button>
                 </div>
 <script src="./jquery.min.js">
 </script>
@@ -67,7 +67,7 @@ var aa = pohon.length-1;
     }
     console.log('pohon : '+JSON.stringify(pohon));
     console.log('path : '+path);
-    $('#guide').html('Done! '+(langkah+1)+' langkah pencarian dalam BFS, '+(path.length+1)+' langkah solusi tercepat.');
+    $('#guide').html('Done! '+(langkah)+' langkah pencarian dalam BFS, '+(path.length)+' langkah solusi tercepat.');
 }
 function bfs_step(){
     breakpoint : if(parseInt(loc)==parseInt(target)){
