@@ -1,0 +1,319 @@
+<div>
+        <h4 id="title" >Grid AI</h4>
+        
+    <div id="container">
+    </div>
+    <p>
+    
+    <div style="display:none" id="muatulang">
+          <a href="">Muat ulang laman</a>
+
+    </div>
+                    <button id="bangun_grid_" onclick="bangun_grid()">Bangun grid</button>
+                    <button id="bangun_tembok_" style="display:none" onclick="bangun_tembok()">Bangun tembok</button>
+            <div style="display:none" id="kontrol">
+                    <h4>Masukkan variabel koordinat lokasi</h4>
+                        <input type="text" id="robot"><button id="pasang_robot" onclick="pasang_robot($('#robot').val())">Pasang robot</button>
+                        <br>
+                        <input type="text" id="target"><button id="pasang_target" onclick="pasang_target($('#target').val())">Pasang target</button>
+<br>
+
+                        <input type="text" id="tambah"><button id="tambahtembok_" onclick="tambah_tembok($('#tambah').val())">Tambah tembok</button>
+                
+            <h4>Jalankan</h4>
+            <button onclick="bfs()">BFS mode</button>
+            <button onclick="" disabled>DFS mode</button>
+            <button onclick="" disabled>A* mode</button>
+</div>
+                </div>
+<script src="./jquery.min.js">
+</script>
+<script>
+"use strict"
+var q;
+var robot;
+var target;
+var tembok=[];
+var sudah=[];
+function waste(){
+}
+function bfs(){
+    $('#title').html('Processing...');
+    $('#kontrol').hide();
+    $('#muatulang').show();
+    var antrian;
+    var antrian_id;
+    var loc;
+    var y;
+    var x;
+    antrian = [];
+    antrian_id=1;
+    antrian_id=parseInt(antrian_id)+1;
+    loc = robot;
+    
+    //perulangan
+    
+    var langkah=1; 
+    
+    //for(q=0;q<30;q++){
+    
+    var q = 0;
+    while(loc!=target){
+    
+    $('#'+loc).addClass('yellow');
+    if(!istembok(loc)){
+
+    
+        console.log('==========================================');
+        console.log('perulangan untuk sekililing '+loc);
+        
+        tembok.push(loc);
+        waste();
+        // atas
+        loc = parseInt(loc);
+        y = loc-20;
+        if(!istembok(y)){
+            console.log('atas '+y+' '+!istembok(y))
+            antrian.push({id:antrian_id,loc:y});
+            console.log({id:antrian_id,loc:y});
+            antrian_id=parseInt(antrian_id)+1;
+        }
+        // kiri
+        loc = parseInt(loc);
+        y = loc-1;
+        if(!istembok(y)){
+            console.log('kiri '+y+' '+!istembok(y))
+            antrian.push({id:antrian_id,loc:y});
+            console.log({id:antrian_id,loc:y});
+            antrian_id=parseInt(antrian_id)+1;
+        }
+        waste();
+        // bawah
+        loc = parseInt(loc);
+        y = loc+20;
+        if(!istembok(y)){
+            console.log('bawah '+y+' '+!istembok(y))
+            antrian.push({id:antrian_id,loc:y});
+            console.log({id:antrian_id,loc:y});
+            antrian_id=parseInt(antrian_id)+1;
+        }
+        waste();
+        // kanan
+        loc = parseInt(loc);
+        y = loc+1;
+        if(!istembok(y)){
+            console.log('kanan '+y+' '+!istembok(y))
+            antrian.push({id:antrian_id,loc:y});
+            console.log({id:antrian_id,loc:y});
+            antrian_id=parseInt(antrian_id)+1;
+        } 
+        
+    }
+        console.log('langkah ke '+langkah );
+        console.log(tembok);
+        var ceksudah;
+        if(ceksudahflag){
+            q=q+1;
+            ceksudahflag=false;
+        }
+        var loc = parseInt(antrian[q].loc)
+        console.log('cek nilai '+loc);
+        var tem;
+        for(tem=0;tem<tembok.length;tem++){
+            console.log('cek tembok '+tembok[tem]);
+                if(parseInt(tembok[tem])==parseInt(loc)){
+                
+                ceksudah = true;
+            }
+        }
+        if(ceksudah){
+            var loc = parseInt(antrian[q].loc)
+            console.log('nilai '+loc+' sudah ada di tembok');
+            console.log(JSON.stringify(antrian));
+            console.log(antrian_id);
+            loc = '';
+            var r = q+1;
+            var loc = parseInt(antrian[r].loc)
+            console.log('nilai yang diambil '+loc);
+            var ceksudahflag=true;
+            $('#'+loc).html('<strong>'+langkah+'</strong>');
+            console.log('langkah : '+langkah+' untuk lokasi '+loc);
+            langkah++
+        } else {
+            var loc = parseInt(antrian[q].loc)
+            console.log('nilai '+loc+' belum ada di tembok');
+            console.log(JSON.stringify(antrian));
+            console.log('nilai yang diambil '+loc);
+            console.log(antrian_id);
+            $('#'+loc).html('<strong>'+langkah+'</strong>');
+            console.log('langkah : '+langkah+' untuk lokasi '+loc);
+            langkah++
+        
+        }
+
+    }
+    $('#title').html('Selesai!');
+}
+
+
+function bangun_grid(){
+    var x = 1;
+    var y = 20;
+    var z = 20;
+    var id = 1
+    while(x<=y){
+            $('#container').append('<div style="">');
+        while(id<=z){
+            $('#container').append('<div class=\"grid\" id=\"'+id+'\">'+id+'</div>');
+            id=id+1;
+        }
+        z=z+y
+        $('#container').append('</div>');
+        x=x+1;
+    }
+    $('#bangun_grid_').hide();
+    $('#bangun_tembok_').show();
+}   
+
+function tambah_tembok(id){
+        tembok.push(id);
+        $('#'+id).addClass('black');
+    }
+function bangun_tembok(){
+    var id;
+    // tembok atas
+    id=1;
+    while(id<=20){
+        tembok.push(id);
+        $('#'+id).addClass('black');
+        id++;
+    }
+    // tembok kiri
+    id=21;
+    while(id<=381){
+        tembok.push(id);
+        $('#'+id).addClass('black');
+        id=id+20;
+    }
+    // tembok bawah
+    id=382;
+    while(id<=399){
+        tembok.push(id);
+        $('#'+id).addClass('black');
+        id++;
+    }
+    // tembok kanan
+    id=40
+    while(id<=400){
+        tembok.push(id);
+        $('#'+id).addClass('black');
+        id=id+20;
+    }
+    $('#bangun_tembok_').hide();
+    $('#kontrol').show();
+}
+
+function istembok(id){
+        var i;
+    for(i=0;i<400; i++){
+        if(id==tembok[i]){
+            return true;
+        }
+    }
+}
+function pasang_robot(id){
+    console.log('robot');
+    if(id>=0 && id<=400){    
+        if(!istembok(id)){
+            $('#'+robot).removeClass('blue');
+            $('#'+id).addClass('blue');
+            robot = id;
+            var id_current = robot;
+        } else {
+            alert('Jangan pasang di tembok!');
+        }
+    } else {
+        alert('Pasang lokasi yang benar! (1-400)');
+    }
+}
+function pasang_target(id){
+    if(id>=0 && id<=400){    
+        if(!istembok(id)){       
+            $('#'+target).removeClass('red');
+            $('#'+id).addClass('red');
+            target = id;
+        } else {
+            alert('Jangan pasang di tembok!');
+        }
+    } else {
+        alert('Pasang lokasi yang benar! (1-400)');
+    }
+}
+
+//fungsi gerak
+function derajat0(){
+    id_now = id_current-1;
+    $('#'+id_now).addClass('yellow');
+    id_current = id_now; 
+}
+function derajat90(){
+    id_now = id_current-20;
+    $('#'+id_now).addClass('yellow');
+    id_current = id_now; 
+}
+function derajat180(){
+    id_now = id_current+1;
+    $('#'+id_now).addClass('yellow');
+    id_current = id_now; 
+}
+function derajat270(){
+    id_now = id_current+20;
+    $('#'+id_now).addClass('yellow');
+    id_current = id_now; 
+}
+$(document).ready(function () {
+    //bangun_grid();
+    //bangun_tembok();
+    //pasang_robot(90);
+
+});
+</script>
+<script>
+console.log = (function(old_funct, div_log) { 
+                  return function(text) {
+                      old_funct(text);
+                          div_log.value += text;
+                            };
+                            } (console.log.bind(console), document.getElementById("log"));
+</script>
+<style>
+.button_grid{
+    display:inline-block;
+    margin:1px;
+}
+.grid{
+    display:inline-block;
+    background-color:#cec8c8;
+    margin:1px;
+    width:20px;
+    height:20px;
+    font-size:10px;
+    color:#969696;
+}
+
+.yellow{
+    background-color:yellow;
+}
+.red{
+    background-color:red;
+}
+.blue{
+    background-color:blue;
+}
+.black{
+    background-color:black;
+}
+.green{
+    background-color:green;
+}
+</style>
