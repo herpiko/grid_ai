@@ -1,6 +1,12 @@
 ## Apa
 
+Terinspirasi dari artikel ini :
+
+http://www.redblobgames.com/pathfinding/a-star/introduction.html
+
 Ini adalah visualisasi dari metode BFS (Breadth First Search) di peta berbasis koordinat. Ditulis menggunakan javascript dalam moda "strict".
+
+
 
 ## Bagaimana
 
