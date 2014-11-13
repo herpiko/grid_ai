@@ -21,7 +21,8 @@
                         <input type="text" id="tambah"><button id="tambahtembok_" onclick="tambah_tembok($('#tambah').val())">Tambah tembok</button>
                 
             <h4>Jalankan</h4>
-            <button onclick="bfs()">BFS mode</button>
+            <button onclick="bfs_loop()">BFS mode</button>
+            <button onclick="bfs_step()">BFS step</button>
             <button onclick="" disabled>DFS mode</button>
             <button onclick="" disabled>A* mode</button>
 </div>
@@ -30,12 +31,211 @@
 </script>
 <script>
 "use strict"
-var q;
 var robot;
 var target;
 var tembok=[];
 var sudah=[];
+var looping;
+//step
+
+    var antrian=[];
+    var pernah=[43];
+    var antrian_id=1;
+    var loc;
+    var y;
+    var x;
+    var q=0;
+    var langkah=1;
+    var ceksudah;
+    var ceksudahflag=false;
+    var sudahpernah=false;
 function waste(){
+}
+
+function bfs_step(){
+    if(parseInt(loc)==parseInt(target)){
+        alert('Udah ketemu!');
+        clearInterval(loopin);
+    } else {
+    
+    
+    $('#title').html('Processing...');
+    $('#muatulang').show();
+    antrian_id=parseInt(antrian_id)+1;
+    //perulangan
+    console.log("step for loc "+loc+" #########################"); 
+    //for(q=0;q<30;q++){
+    console.log('tembok : '+tembok);
+    if(!istembok(loc)){
+        console.log('ambil nilai  untuk sekililingnya '+loc);
+        tembok.push(parseInt(loc));
+        
+        // atas
+        loc = parseInt(loc);
+        y = loc-20;
+        if(!istembok(y)){
+            console.log('cek atas');
+            var tem;
+            sudahpernah=false;
+            for(tem=0;tem<pernah.length;tem++){
+                if(parseInt(pernah[tem])==parseInt(y)){
+                    sudahpernah=true;
+                }
+            }
+            if(!sudahpernah){
+                console.log(y+' belum pernah, masukin ke array')
+                $('#'+y).addClass('green');
+                antrian.push({id:antrian_id,loc:y});
+                console.log(JSON.stringify(antrian));
+                antrian_id=parseInt(antrian_id)+1;
+                pernah.push(parseInt(y));
+            } else {
+                console.log('sudah pernah, skip')
+            }
+        }
+        // kiri
+        loc = parseInt(loc);
+        y = loc-1;
+        if(!istembok(y)){
+            console.log('cek kiri');
+            var tem;
+            sudahpernah=false;
+            for(tem=0;tem<pernah.length;tem++){
+                if(parseInt(pernah[tem])==parseInt(y)){
+                    sudahpernah=true;
+                }
+            }
+            if(!sudahpernah){
+                console.log(y+' belum pernah, masukin ke array')
+                $('#'+y).addClass('green');
+                antrian.push({id:antrian_id,loc:y});
+                console.log(JSON.stringify(antrian));
+                antrian_id=parseInt(antrian_id)+1;
+                pernah.push(parseInt(y));
+            } else {
+                console.log('sudah pernah, skip')
+            }
+        }
+        // bawah
+        loc = parseInt(loc);
+        y = loc+20;
+        if(!istembok(y)){
+            console.log('cek bawah');
+            var tem;
+            sudahpernah=false;
+            for(tem=0;tem<pernah.length;tem++){
+                if(parseInt(pernah[tem])==parseInt(y)){
+                    sudahpernah=true;
+                }
+            }
+            if(!sudahpernah){
+                console.log(y+' belum pernah, masukin ke array')
+                $('#'+y).addClass('green');
+                antrian.push({id:antrian_id,loc:y});
+                console.log(JSON.stringify(antrian));
+                antrian_id=parseInt(antrian_id)+1;
+                pernah.push(parseInt(y));
+            } else {
+                console.log('sudah pernah, skip')
+            }
+        }
+        // kanan
+        loc = parseInt(loc);
+        y = loc+1;
+        if(!istembok(y)){
+            console.log('cek kanan');
+            var tem;
+            sudahpernah=false;
+            for(tem=0;tem<pernah.length;tem++){
+                if(parseInt(pernah[tem])==parseInt(y)){
+                    sudahpernah=true;
+                }
+            }
+            if(!sudahpernah){
+                console.log(y+' belum pernah, masukin ke array')
+                $('#'+y).addClass('green');
+                antrian.push({id:antrian_id,loc:y});
+                console.log(JSON.stringify(antrian));
+                antrian_id=parseInt(antrian_id)+1;
+                pernah.push(parseInt(y));
+            } else {
+                console.log('sudah pernah, skip')
+            }
+        }
+        
+        
+        // selesai ambil sekeliling
+        console.log('langkah ke '+langkah );
+        if(ceksudahflag){
+            q++;
+            ceksudahflag=false;
+        }
+        
+        console.log(JSON.stringify(antrian));
+        q=parseInt(q);
+        console.log(q);
+        loc = antrian[q].loc;
+        console.log('cek nilai '+loc);
+        var tem;
+        for(tem=0;tem<tembok.length;tem++){
+            //console.log('cek tembok '+tembok[tem]);
+                if(parseInt(tembok[tem])==parseInt(loc)){
+                
+                ceksudah = true;
+            }
+        }
+        if(ceksudah){
+            loc = parseInt(antrian[q].loc)
+            console.log(JSON.stringify(antrian));
+            console.log('nilai '+loc+' sudah dipakai');
+            console.log(antrian_id);
+            loc = '';
+            //var r = q+1;
+            loc = parseInt(antrian[q].loc)
+            console.log('nilai yang diambil '+loc);
+            ceksudahflag=true;
+            console.log('kuningkan '+loc);
+            $('#'+loc).html('<strong>'+langkah+'</strong>');
+            $('#'+loc).addClass('yellow');
+            $('#'+loc).removeClass('green');
+            console.log('langkah : '+langkah+' untuk lokasi '+loc);
+            var loc_ = parseInt(antrian[q].loc)
+            console.log(JSON.stringify(antrian));
+            console.log('nilai '+loc_+' belum dipakai');
+            console.log('nilai yang diambil '+loc_);
+            console.log(antrian_id);
+            console.log('langkah selanjutnya : '+langkah+' untuk lokasi '+loc_);
+            langkah++
+        } else {
+            console.log('kuningkan '+loc);
+            $('#'+loc).html('<strong>'+langkah+'</strong>');
+            $('#'+loc).addClass('yellow');
+            $('#'+loc).removeClass('green');
+            var loc_ = parseInt(antrian[q].loc)
+            console.log(JSON.stringify(antrian));
+            console.log('nilai '+loc_+' belum dipakai');
+            console.log('nilai yang diambil '+loc_);
+            console.log(antrian_id);
+            console.log('langkah selanjutnya : '+langkah+' untuk lokasi '+loc_);
+            langkah++
+        
+        console.log('tambahkan ke tembok : '+tembok);
+        }
+    } else {
+    
+        console.log("sudah ada di tembok"); 
+    } 
+    console.log("end of step #########################");
+   q++; 
+    
+        
+    }
+}
+
+function bfs_loop(){
+    looping = setInterval(function(){
+        bfs_step();
+    },300);
 }
 function bfs(){
     $('#title').html('Processing...');
@@ -222,6 +422,7 @@ function istembok(id){
     }
 }
 function pasang_robot(id){
+    loc = id;
     console.log('robot');
     if(id>=0 && id<=400){    
         if(!istembok(id)){
@@ -272,19 +473,11 @@ function derajat270(){
     id_current = id_now; 
 }
 $(document).ready(function () {
-    //bangun_grid();
-    //bangun_tembok();
-    //pasang_robot(90);
+    bangun_grid();
+    bangun_tembok();
+    pasang_robot(43);
 
 });
-</script>
-<script>
-console.log = (function(old_funct, div_log) { 
-                  return function(text) {
-                      old_funct(text);
-                          div_log.value += text;
-                            };
-                            } (console.log.bind(console), document.getElementById("log"));
 </script>
 <style>
 .button_grid{
